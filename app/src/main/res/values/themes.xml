@@ -3,6 +3,9 @@
     <style name="Base.Theme.UrlShortener" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/red</item>
+        <item name="android:fontFamily">@font/inter</item>
+
     </style>
 
     <style name="Theme.UrlShortener" parent="Base.Theme.UrlShortener" />
