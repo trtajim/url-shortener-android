@@ -69,41 +69,8 @@ public class LoginActivity extends AppCompatActivity {
     private void initVariables(){
         sessionManager = new SessionManager(this);
         binding.loginProgressBar.setVisibility(GONE);
-
-        binding.tieEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                binding.tilEmail.setError(null);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-        });
-
-        binding.tiePassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable editable) {
-                binding.tiePassword.setError(null);
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-        });
-
+        AppUtils.clearErrorOnTextChange(binding.tieEmail, binding.tilEmail);
+        AppUtils.clearErrorOnTextChange(binding.tiePassword, binding.tilPassword);
     }
     private void initClickListeners(){
         binding.btnLogin.setOnClickListener(v->{
@@ -177,7 +144,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
-                if (token == null) {
+                if (!jsonObject.has("token") || jsonObject.isNull("token")) {
                     AppUtils.makeToast(LoginActivity.this, "Token not found");
                     return;
                 }
