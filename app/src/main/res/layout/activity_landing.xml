@@ -209,7 +209,7 @@
                 android:text="Login"
                 android:textSize="16sp"
                 app:cornerRadius="12dp"
-                app:layout_constraintBottom_toTopOf="@id/tvTermsPrivacy"
+                app:layout_constraintBottom_toTopOf="@id/llTermsPrivacyContainer"
                 app:strokeColor="?attr/colorPrimary"
                 android:textColor="?attr/colorPrimary"
                 android:layout_marginBottom="10dp"
@@ -217,19 +217,69 @@
                 android:textStyle="bold"
                 app:strokeWidth="2dp"
                 />
-            <TextView
-                android:id="@+id/tvTermsPrivacy"
+            <LinearLayout
+                android:id="@+id/llTermsPrivacyContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
                 android:layout_marginTop="16dp"
-                android:gravity="left"
-                android:lineSpacingExtra="4dp"
-                android:text="@string/privacy"
-                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="By continuing, you agree to our"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:id="@+id/tvTerms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/terms_of_service"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorPrimary"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:background="?attr/selectableItemBackground" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="and our"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:id="@+id/tvPrivacy"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/privacy_policy"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorPrimary"
+                        android:paddingStart="2dp"
+                        android:paddingEnd="2dp"
+                        android:background="?attr/selectableItemBackground"
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,9 +11,11 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tajim.urlshortener.R;
+import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.auth.LoginActivity;
 import com.tajim.urlshortener.auth.RegisterActivity;
 import com.tajim.urlshortener.databinding.ActivityLandingBinding;
+import com.tajim.urlshortener.utils.AppUtils;
 
 public class LandingActivity extends AppCompatActivity {
     ActivityLandingBinding binding;
@@ -45,6 +47,16 @@ public class LandingActivity extends AppCompatActivity {
         binding.btnRegister.setOnClickListener(v->{
             startActivity(new Intent(LandingActivity.this, RegisterActivity.class));
         });
+
+        binding.tvPrivacy.setOnClickListener(v->{
+            String url = ApiConfig.SERVER_BASE_URL+"/privacy-policy";
+            AppUtils.openLinksInCustomChromeTabOrBrowser(this, url);
+        });
+        binding.tvTerms.setOnClickListener(v->{
+            String url = ApiConfig.SERVER_BASE_URL+"/terms-conditions";
+            AppUtils.openLinksInCustomChromeTabOrBrowser(this, url);
+        });
+
 
     }
 }

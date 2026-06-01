@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Url Shortener</string>
-    <string name="privacy">
-By continuing, you agree to our <b><u>Terms of Service</u></b> and <b><u>Privacy Policy</u></b>
-</string></resources>
+    <string name="privacy_policy">
+        <b><u>Privacy Policy</u></b>
+    </string>
+        <string name="terms_of_service">
+        <b><u>Terms of Service</u></b>
+    </string>
+</resources>
