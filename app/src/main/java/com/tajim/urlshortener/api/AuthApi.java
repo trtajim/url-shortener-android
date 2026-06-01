@@ -30,4 +30,29 @@ public class AuthApi {
 
 
     }
+
+    public static void register(String name, String email,String password, Callback callback){
+
+        String url = ApiConfig.API_BASE_URL+"/register";
+
+        String deviceName = AppUtils.getDeviceName();
+
+        RequestBody body = new FormBody.Builder()
+                .add("name", name)
+                .add("email", email)
+                .add("password", password)
+                .add("device_name", deviceName)
+                .build();
+
+        Request request = ApiRequest.guest()
+                .url(url)
+                .post(body)
+                .build();
+
+        ApiClient.getClient()
+                .newCall(request)
+                .enqueue(callback);
+
+
+    }
 }

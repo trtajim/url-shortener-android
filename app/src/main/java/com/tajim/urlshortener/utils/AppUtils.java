@@ -7,12 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.browser.customtabs.CustomTabsIntent;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.tajim.urlshortener.R;
 
 import org.json.JSONException;
@@ -71,5 +75,24 @@ public class AppUtils {
             Toast.makeText(context, "You have no browser installed", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    public static void clearErrorOnTextChange(TextInputEditText textInputEditText, TextInputLayout textInputLayout){
+        textInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable editable) {
+                textInputLayout.setError(null);
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+        });
     }
 }
