@@ -166,7 +166,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 runOnUiThread(()->{
                     AppUtils.makeToast(RegisterActivity.this, "Account created Successfully");
-                    startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     finish();
                 });
             }

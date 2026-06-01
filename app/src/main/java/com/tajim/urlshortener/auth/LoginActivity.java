@@ -151,10 +151,14 @@ public class LoginActivity extends AppCompatActivity {
 
                 sessionManager.saveToken(token);
 
-                runOnUiThread(()->{
+                runOnUiThread(() -> {
                     AppUtils.makeToast(LoginActivity.this, "Logged in Successfully");
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     finish();
+
                 });
 
             }
