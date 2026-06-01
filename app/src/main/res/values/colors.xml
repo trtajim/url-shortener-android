@@ -2,5 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#9e1831</color>
+    <color name="cream">#F8F5F5</color>
+    <color name="near_black">#1A1A1A</color>
+    <color name="charcoal_grey">#282828</color>
+    <color name="crimson_red">#9E1831</color>
 </resources>
