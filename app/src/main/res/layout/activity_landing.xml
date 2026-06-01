@@ -20,7 +20,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/vector"
         android:background="@drawable/top_radius_bg"
-        android:layout_marginTop="-25dp"
+        android:layout_marginTop="-30dp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/app_name"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="28sp"
+                android:textSize="26sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -50,7 +50,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="Clean, secure links. Optimized for your reach."
-                android:textSize="16sp"
+                android:textSize="15sp"
                 app:layout_constraintTop_toBottomOf="@id/tvAppName"
                 android:textColor="?attr/colorOnSurfaceVariant"/>
 
@@ -83,7 +83,7 @@
                         android:id="@+id/title1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:text="Advanced Analytics"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
@@ -95,9 +95,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:text="Track clicks and device types in real-time."
-                        android:textSize="14sp"
+                        android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@id/icon1"
                         app:layout_constraintTop_toBottomOf="@id/title1"
                         android:textColor="?attr/colorOnSurfaceVariant"/>
@@ -125,7 +125,7 @@
                         android:id="@+id/title2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:text="Password Protection"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
@@ -137,9 +137,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Secure sensitive links with custom passwords."
-                        android:textSize="14sp"
+                        android:layout_marginStart="10dp"
+                        android:text="Secure your links with custom passwords."
+                        android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@id/icon2"
                         app:layout_constraintTop_toBottomOf="@id/title2"
                         android:textColor="?attr/colorOnSurfaceVariant"/>
@@ -167,7 +167,7 @@
                         android:id="@+id/title3"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginStart="10dp"
                         android:text="Secure &amp; Encrypted"
                         android:textColor="?attr/colorOnSurface"
                         android:textStyle="bold"
@@ -180,9 +180,9 @@
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:text="Enterprise-grade encryption for all your data."
-                        android:textSize="14sp"
+                        android:layout_marginStart="10dp"
+                        android:text="Security &amp; encryption for all your data."
+                        android:textSize="13sp"
                         app:layout_constraintStart_toEndOf="@id/icon3"
                         app:layout_constraintTop_toBottomOf="@id/title3"
                         android:textColor="?attr/colorOnSurfaceVariant"/>
