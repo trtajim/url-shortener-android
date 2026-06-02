@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     SessionManager sessionManager;
+    AuthApi authApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     }
     private void initVariables(){
         sessionManager = new SessionManager(this);
+        authApi = new AuthApi(this);
         binding.loginProgressBar.setVisibility(GONE);
         AppUtils.clearErrorOnTextChange(binding.tieEmail, binding.tilEmail);
         AppUtils.clearErrorOnTextChange(binding.tiePassword, binding.tilPassword);
@@ -88,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password){
 
         AppUtils.startLoading(this);
-        AuthApi.login(email, password, new Callback() {
+        authApi.login(email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(AppUtils::endLoading);

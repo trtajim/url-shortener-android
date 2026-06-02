@@ -25,6 +25,7 @@ import okhttp3.Response;
 public class RegisterActivity extends AppCompatActivity {
     ActivityRegisterBinding binding;
     SessionManager sessionManager;
+    AuthApi authApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     private void initVariables(){
+        authApi = new AuthApi(this);
         sessionManager = new SessionManager(this);
         binding.registerProgressBar.setVisibility(GONE);
 
@@ -105,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
     private void register(String name, String email, String password){
         AppUtils.startLoading(this);
-        AuthApi.register(name, email, password, new Callback() {
+        authApi.register(name, email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(AppUtils::endLoading);

@@ -31,6 +31,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
 
     ActivityVerifyEmailBinding binding;
     SessionManager sessionManager;
+    AuthApi authApi;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         });
     }
     private void initVariables(){
+        authApi = new AuthApi(this);
         sessionManager = new SessionManager(this);
     }
     private void setupClickListeners(){
@@ -73,7 +75,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
     private void logout(){
         AppUtils.startLoading(this);
-        AuthApi.logout(sessionManager.getToken(), new Callback() {
+        authApi.logout(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(AppUtils::endLoading);
@@ -108,7 +110,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
 
     private void sendVerificationMail(){
         AppUtils.startLoading(this);
-        AuthApi.sendVerificationMail(sessionManager.getToken(), new Callback() {
+        authApi.sendVerificationMail( new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(AppUtils::endLoading);
@@ -144,7 +146,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
 
     private void checkIfVerified(){
         AppUtils.startLoading(this);
-        AuthApi.getUser(sessionManager.getToken(), new Callback() {
+        authApi.getUser(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
                 runOnUiThread(AppUtils::endLoading);
