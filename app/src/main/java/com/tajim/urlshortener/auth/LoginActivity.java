@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
+import com.tajim.urlshortener.api.SafeCallback;
 import com.tajim.urlshortener.databinding.ActivityLoginBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
@@ -90,30 +91,11 @@ public class LoginActivity extends AppCompatActivity {
     private void login(String email, String password){
 
         AppUtils.startLoading(this, "Logging in...");
-        authApi.login(email, password, new Callback() {
+
+        authApi.login(email, password, new SafeCallback(LoginActivity.this) {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(AppUtils::endLoading);
-                AppUtils.makeToast(LoginActivity.this, e.getMessage());
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                runOnUiThread(AppUtils::endLoading);
-                String body = response.body().string();
-
-                JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
-
-                if (jsonObject == null) {
-                    AppUtils.makeToast(LoginActivity.this, "Invalid server response");
-                    return;
-                }
-
-                if (!response.isSuccessful()){
-                    String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
-                    AppUtils.makeToast(LoginActivity.this, message);
-                    return;
-                }
+            public void onSuccess(String bodyFromResponse) {
+                JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
                 String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
                 if (!jsonObject.has("token") || jsonObject.isNull("token")) {
@@ -125,7 +107,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 AppUtils.makeToast(LoginActivity.this, "Logged in Successfully");
                 sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
-
 
             }
         });

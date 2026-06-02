@@ -11,6 +11,7 @@ import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tajim.urlshortener.api.AuthApi;
+import com.tajim.urlshortener.api.SafeCallback;
 import com.tajim.urlshortener.databinding.ActivityVerifyEmailBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
@@ -71,116 +72,47 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
     private void logout(){
         AppUtils.startLoading(this,"Signing out...");
-        authApi.logout(new Callback() {
+
+        authApi.logout(new SafeCallback(this) {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(AppUtils::endLoading);
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                runOnUiThread(AppUtils::endLoading);
-
-                String body = response.body().string();
-
-                JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
-
-                if (jsonObject == null) {
-                    AppUtils.makeToast(VerifyEmailActivity.this, "Invalid server response");
-                    return;
-                }
-
-                if (!response.isSuccessful()){
-                    String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
-                    AppUtils.makeToast(VerifyEmailActivity.this, message);
-                    return;
-                }
-
+            public void onSuccess(String bodyFromResponse) {
                 sessionManager.logout();
-
-
             }
         });
+
     }
 
     private void sendVerificationMail(){
         AppUtils.startLoading(this,"Sending verification email...");
-        authApi.sendVerificationMail( new Callback() {
+
+        authApi.sendVerificationMail(new SafeCallback(this) {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(AppUtils::endLoading);
+            public void onSuccess(String bodyFromResponse) {
+                JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                runOnUiThread(AppUtils::endLoading);
-
-                String body = response.body().string();
-
-
-                JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
-
-                if (jsonObject == null) {
-                    AppUtils.makeToast(VerifyEmailActivity.this, "Invalid server response");
-                    return;
-                }
-
-                if (!response.isSuccessful()){
-                    String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
-                    AppUtils.makeToast(VerifyEmailActivity.this, message);
-                    return;
-                }
-                
                 AppUtils.makeToast(VerifyEmailActivity.this, AppUtils.getStringFromJsonObject(jsonObject, "message", "Verification Link was successfully sent"));
-
-
             }
         });
+
     }
 
     private void checkIfVerified(){
         AppUtils.startLoading(this,"Checking verification status...");
-        authApi.getUser(new Callback() {
+        authApi.getUser(new SafeCallback(this) {
             @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                runOnUiThread(AppUtils::endLoading);
-
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
-                runOnUiThread(AppUtils::endLoading);
-
-                String body = response.body().string();
-
-
-                JSONObject user = AppUtils.getJsonObjFromString(body);
-
-                if (user == null) {
-                    AppUtils.makeToast(VerifyEmailActivity.this, "Invalid server response");
-                    return;
-                }
-
-                if (!response.isSuccessful()){
-                    String message = AppUtils.getStringFromJsonObject(user, "message", "Something went wrong");
-                    AppUtils.makeToast(VerifyEmailActivity.this, message);
-                    return;
-                }
-                
+            public void onSuccess(String bodyFromResponse) {
+                JSONObject user = AppUtils.getJsonObjFromString(bodyFromResponse);
                 String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
                 if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {
                     AppUtils.makeToast(VerifyEmailActivity.this, "Email not verified. Please check your inbox.");
                     return;
                 }
-                
-                sessionManager.routeUser(user);
 
+                sessionManager.routeUser(user);
 
 
             }
         });
+
     }
 }
