@@ -55,4 +55,46 @@ public class AuthApi {
 
 
     }
+
+    public static void logout(String token, Callback callback){
+        String url = ApiConfig.API_BASE_URL+"/logout";
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = ApiRequest.authorized(token)
+                .url(url)
+                .post(body)
+                .build();
+        ApiClient.getClient()
+                .newCall(request)
+                .enqueue(callback);
+
+    }
+
+    public static void sendVerificationMail(String token, Callback callback){
+        String url = ApiConfig.API_BASE_URL+"/verification/send";
+        RequestBody body = new FormBody.Builder().build();
+
+        Request request = ApiRequest.authorized(token)
+                .url(url)
+                .post(body)
+                .build();
+
+        ApiClient.getClient()
+                .newCall(request)
+                .enqueue(callback);
+
+    }
+
+    public static void getUser(String token, Callback callback){
+        String url = ApiConfig.API_BASE_URL+"/me";
+
+        Request request = ApiRequest.authorized(token)
+                .url(url)
+                .get()
+                .build();
+
+        ApiClient.getClient()
+                .newCall(request)
+                .enqueue(callback);
+    }
 }

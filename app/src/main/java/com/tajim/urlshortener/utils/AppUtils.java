@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import com.tajim.urlshortener.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import androidx.appcompat.app.AlertDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class AppUtils {
     public static String getDeviceName(){
@@ -94,5 +97,36 @@ public class AppUtils {
 
             }
         });
+    }
+
+    public static void clearAllActivitiesAndNavigate(Context context, Class<?> targetActivity) {
+        Intent intent = new Intent(context, targetActivity);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
+    private static AlertDialog loadingDialog;
+
+    public static void startLoading(Context context) {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            return;
+        }
+
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.custom_alert_for_loading, null);
+
+
+        loadingDialog = new MaterialAlertDialogBuilder(context)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create();
+
+        loadingDialog.show();
+    }
+
+    public static void endLoading() {
+        if (loadingDialog != null && loadingDialog.isShowing()) {
+            loadingDialog.dismiss();
+            loadingDialog = null;
+        }
     }
 }
