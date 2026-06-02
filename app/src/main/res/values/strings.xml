@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Url Shortener</string>
+    <string name="website">https://go.tajimz.xyz</string>
+    <string name="open">open</string>
+    <string name="close">close</string>
     <string name="privacy_policy">
         <b><u>Privacy Policy</u></b>
     </string>
