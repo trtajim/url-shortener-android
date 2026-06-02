@@ -76,6 +76,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         binding.navView.setCheckedItem(R.id.dashboard);
 
 
+        binding.btnPrivacy.setOnClickListener(v->{
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+            AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL+"/privacy-policy");
+
+        });
+
+        binding.btnTerms.setOnClickListener(v->{
+            binding.drawerLayout.closeDrawer(GravityCompat.START);
+            AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL+"/terms-conditions");
+
+        });
+
+
 
     }
     private void checkUserStatus(){
@@ -107,12 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL);
         }else if (id == R.id.about_developer) {
             AppUtils.openLinksInCustomChromeTabOrBrowser(this, "https://tajimz.xyz");
-        }else if (id == R.id.about_app) {
-            AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL+"/about");
-        }else if (id == R.id.privacy) {
-            AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL+"/privacy-policy");
-        }else if (id == R.id.terms) {
-            AppUtils.openLinksInCustomChromeTabOrBrowser(this, ApiConfig.SERVER_BASE_URL+"/terms-conditions");
         }else if (id == R.id.logout) {
             sessionManager.logout();
         }
