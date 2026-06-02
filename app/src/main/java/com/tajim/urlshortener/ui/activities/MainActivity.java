@@ -1,4 +1,4 @@
-package com.tajim.urlshortener;
+package com.tajim.urlshortener.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tajim.urlshortener.databinding.ActivityMainBinding;
-import com.tajim.urlshortener.ui.LandingActivity;
 import com.tajim.urlshortener.utils.SessionManager;
 
 public class MainActivity extends AppCompatActivity {

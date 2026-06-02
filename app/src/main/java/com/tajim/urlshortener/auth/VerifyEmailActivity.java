@@ -1,8 +1,6 @@
 package com.tajim.urlshortener.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -12,8 +10,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.tajim.urlshortener.MainActivity;
-import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.AuthApi;
 import com.tajim.urlshortener.databinding.ActivityVerifyEmailBinding;
 import com.tajim.urlshortener.utils.AppUtils;

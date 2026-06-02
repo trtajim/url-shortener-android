@@ -1,4 +1,4 @@
-package com.tajim.urlshortener.ui;
+package com.tajim.urlshortener.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,10 +7,8 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.auth.LoginActivity;
 import com.tajim.urlshortener.auth.RegisterActivity;

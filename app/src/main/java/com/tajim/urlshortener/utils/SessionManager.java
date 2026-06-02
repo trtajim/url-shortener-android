@@ -3,11 +3,10 @@ package com.tajim.urlshortener.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 
-import com.tajim.urlshortener.MainActivity;
+import com.tajim.urlshortener.ui.activities.MainActivity;
 import com.tajim.urlshortener.auth.VerifyEmailActivity;
-import com.tajim.urlshortener.ui.LandingActivity;
+import com.tajim.urlshortener.ui.activities.LandingActivity;
 
 import org.json.JSONObject;
 
