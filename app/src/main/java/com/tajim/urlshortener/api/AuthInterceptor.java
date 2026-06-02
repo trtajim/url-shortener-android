@@ -29,7 +29,13 @@ public class AuthInterceptor implements Interceptor {
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
         Response response = chain.proceed(chain.request());
+        String body = response.peekBody(1024 * 8).string();
+
         if (response.code() == 401) {
+
+            if (!body.contains("Unauthenticated.")) {
+                return response;
+            }
 
             new Handler(Looper.getMainLooper()).post(() -> {
                 Toast.makeText(context, "Session expired", Toast.LENGTH_SHORT).show();
@@ -38,6 +44,10 @@ public class AuthInterceptor implements Interceptor {
 
 
         }else if (response.code() == 403){
+
+            if (!body.contains("email address not verified")){
+                return response;
+            }
             AppUtils.clearAllActivitiesAndNavigate(context, VerifyEmailActivity.class);
         }
         return response;
