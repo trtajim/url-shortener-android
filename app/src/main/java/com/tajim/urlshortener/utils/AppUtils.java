@@ -12,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -107,20 +108,29 @@ public class AppUtils {
 
     private static AlertDialog loadingDialog;
 
-    public static void startLoading(Context context) {
+    public static void startLoading(Activity activity, String message) {
+
+        if (activity == null || activity.isFinishing()) return;
+
         if (loadingDialog != null && loadingDialog.isShowing()) {
             return;
         }
 
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.custom_alert_for_loading, null);
+        activity.runOnUiThread(() -> {
 
+            View dialogView = LayoutInflater.from(activity)
+                    .inflate(R.layout.custom_alert_for_loading, null);
 
-        loadingDialog = new MaterialAlertDialogBuilder(context)
-                .setView(dialogView)
-                .setCancelable(false)
-                .create();
+            TextView loadingText = dialogView.findViewById(R.id.loadingText);
+            loadingText.setText(message);
 
-        loadingDialog.show();
+            loadingDialog = new MaterialAlertDialogBuilder(activity)
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .create();
+
+            loadingDialog.show();
+        });
     }
 
     public static void endLoading() {

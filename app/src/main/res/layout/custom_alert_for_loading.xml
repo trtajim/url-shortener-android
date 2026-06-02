@@ -11,7 +11,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        style="?android:attr/progressBarStyle" />
+        style="?android:attr/progressBarStyle"
+        android:indeterminateTint="?attr/colorPrimary"
+        />
 
     <TextView
         android:id="@+id/loadingText"

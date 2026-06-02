@@ -89,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void login(String email, String password){
 
-        AppUtils.startLoading(this);
+        AppUtils.startLoading(this, "Logging in...");
         authApi.login(email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {

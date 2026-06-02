@@ -70,7 +70,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         });
     }
     private void logout(){
-        AppUtils.startLoading(this);
+        AppUtils.startLoading(this,"Signing out...");
         authApi.logout(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -105,7 +105,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
 
     private void sendVerificationMail(){
-        AppUtils.startLoading(this);
+        AppUtils.startLoading(this,"Sending verification email...");
         authApi.sendVerificationMail( new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -141,7 +141,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
 
     private void checkIfVerified(){
-        AppUtils.startLoading(this);
+        AppUtils.startLoading(this,"Checking verification status...");
         authApi.getUser(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -169,7 +169,13 @@ public class VerifyEmailActivity extends AppCompatActivity {
                     AppUtils.makeToast(VerifyEmailActivity.this, message);
                     return;
                 }
-
+                
+                String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
+                if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {
+                    AppUtils.makeToast(VerifyEmailActivity.this, "Email not verified. Please check your inbox.");
+                    return;
+                }
+                
                 sessionManager.routeUser(user);
 
 

@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     private void register(String name, String email, String password){
-        AppUtils.startLoading(this);
+        AppUtils.startLoading(this, "Creating Account...");
         authApi.register(name, email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
