@@ -1,36 +1,23 @@
 package com.tajim.urlshortener.auth;
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import com.tajim.urlshortener.MainActivity;
-import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
-import com.tajim.urlshortener.databinding.ActivityLandingBinding;
 import com.tajim.urlshortener.databinding.ActivityRegisterBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
-
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -68,18 +55,6 @@ public class RegisterActivity extends AppCompatActivity {
         AppUtils.clearErrorOnTextChange(binding.tieName, binding.tilName);
 
 
-    }
-    private void startLoading(){
-        binding.btnRegister.setText("");
-        binding.btnRegister.setEnabled(false);
-        binding.registerProgressBar.setVisibility(VISIBLE);
-    }
-    private void endLoading(){
-        runOnUiThread(()->{
-            binding.btnRegister.setText("Register");
-            binding.btnRegister.setEnabled(true);
-            binding.registerProgressBar.setVisibility(GONE);
-        });
     }
 
 
@@ -129,17 +104,17 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     private void register(String name, String email, String password){
-        startLoading();
+        AppUtils.startLoading(this);
         AuthApi.register(name, email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                endLoading();
+                runOnUiThread(AppUtils::endLoading);
                 AppUtils.makeToast(RegisterActivity.this, e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                endLoading();
+                runOnUiThread(AppUtils::endLoading);
                 String body = response.body().string();
 
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
@@ -164,13 +139,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 sessionManager.saveToken(token);
 
-                runOnUiThread(()->{
-                    AppUtils.makeToast(RegisterActivity.this, "Account created Successfully");
-                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                });
+
+                AppUtils.makeToast(RegisterActivity.this, "Account created Successfully");
+                sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
             }
         });
 

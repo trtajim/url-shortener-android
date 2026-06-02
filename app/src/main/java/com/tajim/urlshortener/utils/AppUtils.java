@@ -129,4 +129,16 @@ public class AppUtils {
             loadingDialog = null;
         }
     }
+
+    public static JSONObject getJsonObjOrNullFromJsonObj(JSONObject jsonObject, String keyword) {
+        if (jsonObject == null) {
+            return null;
+        }
+
+        try {
+            return jsonObject.getJSONObject(keyword);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
 }

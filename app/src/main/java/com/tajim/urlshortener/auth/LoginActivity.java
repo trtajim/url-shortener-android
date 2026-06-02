@@ -1,43 +1,24 @@
 package com.tajim.urlshortener.auth;
 
 import static android.view.View.GONE;
-import static android.view.View.VISIBLE;
-
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import com.google.android.material.textfield.TextInputEditText;
-import com.tajim.urlshortener.MainActivity;
-import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
-import com.tajim.urlshortener.databinding.ActivityLandingBinding;
 import com.tajim.urlshortener.databinding.ActivityLoginBinding;
-import com.tajim.urlshortener.ui.LandingActivity;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
-
 import org.json.JSONObject;
-
 import java.io.IOException;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -102,32 +83,21 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void startLoading(){
-        binding.btnLogin.setText("");
-        binding.btnLogin.setEnabled(false);
-        binding.loginProgressBar.setVisibility(VISIBLE);
-    }
-    private void endLoading(){
-        runOnUiThread(()->{
-            binding.btnLogin.setText("Log In");
-            binding.btnLogin.setEnabled(true);
-            binding.loginProgressBar.setVisibility(GONE);
-        });
-    }
+
 
     private void login(String email, String password){
 
-        startLoading();
+        AppUtils.startLoading(this);
         AuthApi.login(email, password, new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                endLoading();
+                runOnUiThread(AppUtils::endLoading);
                 AppUtils.makeToast(LoginActivity.this, e.getMessage());
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                endLoading();
+                runOnUiThread(AppUtils::endLoading);
                 String body = response.body().string();
 
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
@@ -151,15 +121,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 sessionManager.saveToken(token);
 
-                runOnUiThread(() -> {
-                    AppUtils.makeToast(LoginActivity.this, "Logged in Successfully");
+                AppUtils.makeToast(LoginActivity.this, "Logged in Successfully");
+                sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
 
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-
-                });
 
             }
         });

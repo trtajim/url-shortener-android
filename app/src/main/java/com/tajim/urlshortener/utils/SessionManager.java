@@ -3,6 +3,7 @@ package com.tajim.urlshortener.utils;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.tajim.urlshortener.MainActivity;
 import com.tajim.urlshortener.auth.VerifyEmailActivity;
@@ -59,7 +60,7 @@ public class SessionManager {
 
         String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
 
-        if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty()){
+        if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {
             AppUtils.clearAllActivitiesAndNavigate(context, VerifyEmailActivity.class);
             return;
         }
