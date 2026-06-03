@@ -32,6 +32,11 @@ public abstract class SafeCallback implements Callback {
     @Override
     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
         AppUtils.endLoading();
+
+        if ("true".equals(response.header("X-Auth-Handled"))) {
+            return;
+        }
+
         String body = response.body().string();
 
         JSONObject jsonObject = AppUtils.getJsonObjFromString(body);
@@ -42,8 +47,8 @@ public abstract class SafeCallback implements Callback {
         }
 
         if (!response.isSuccessful()){
-//            String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
-//            showToastInUiThread(message);
+            String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
+            showToastInUiThread(message);
             return;
         }
 

@@ -28,6 +28,7 @@ public class AuthInterceptor implements Interceptor {
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
+        boolean isHandled = false;
         Response response = chain.proceed(chain.request());
         String body = response.peekBody(1024 * 8).string();
 
@@ -42,7 +43,7 @@ public class AuthInterceptor implements Interceptor {
             });
             sessionManager.clearTokenFromDevice();
             AppUtils.logD("AuthInterceptor", "intercept: 401");
-
+            isHandled = true;
 
 
         }else if (response.code() == 403){
@@ -52,8 +53,11 @@ public class AuthInterceptor implements Interceptor {
             }
             AppUtils.clearAllActivitiesAndNavigate(context, VerifyEmailActivity.class);
             AppUtils.logD("AuthInterceptor", "intercept: 403");
+            isHandled = true;
         }
-        return response;
+        return response.newBuilder()
+                .header("X-Auth-Handled", ""+isHandled)
+                .build();
 
     }
 
