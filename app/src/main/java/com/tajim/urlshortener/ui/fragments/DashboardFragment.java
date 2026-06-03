@@ -122,4 +122,10 @@ public class DashboardFragment extends Fragment {
             startActivity(new Intent(requireContext(), CreateUrlActivity.class));
         });
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchUrls();
+    }
 }
