@@ -19,13 +19,14 @@ public abstract class SafeCallback implements Callback {
     }
 
     public abstract void onSuccess(String bodyFromResponse);
+    protected void onFailureHandled(Call call, IOException e) {
+        showToastInUiThread(e.getMessage());
+        AppUtils.endLoading();
+    }
 
     @Override
     public void onFailure(@NonNull Call call, @NonNull IOException e) {
-        showToastInUiThread(e.getMessage());
-        AppUtils.endLoading();
-
-
+        onFailureHandled(call, e);
     }
 
     @Override
@@ -41,8 +42,8 @@ public abstract class SafeCallback implements Callback {
         }
 
         if (!response.isSuccessful()){
-            String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
-            showToastInUiThread(message);
+//            String message = AppUtils.getStringFromJsonObject(jsonObject, "message", "Something went wrong");
+//            showToastInUiThread(message);
             return;
         }
 
