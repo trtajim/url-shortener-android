@@ -1,6 +1,7 @@
 package com.tajim.urlshortener.api;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 import android.os.Handler;
 import android.os.Looper;
@@ -40,14 +41,17 @@ public class AuthInterceptor implements Interceptor {
                 Toast.makeText(context, "Session expired", Toast.LENGTH_SHORT).show();
             });
             sessionManager.clearTokenFromDevice();
+            AppUtils.logD("AuthInterceptor", "intercept: 401");
+
 
 
         }else if (response.code() == 403){
 
-            if (!body.contains("email address not verified")){
+            if (!body.contains("email address is not verified.")){
                 return response;
             }
             AppUtils.clearAllActivitiesAndNavigate(context, VerifyEmailActivity.class);
+            AppUtils.logD("AuthInterceptor", "intercept: 403");
         }
         return response;
 

@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +22,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.tajim.urlshortener.BuildConfig;
 import com.tajim.urlshortener.R;
 
 import org.json.JSONException;
@@ -184,6 +186,12 @@ public class AppUtils {
         }
 
         builder.show();
+    }
+
+    public static void logD(String keyword, String message){
+        if (BuildConfig.DEBUG) {
+            Log.d(keyword, message);
+        }
     }
 
 
