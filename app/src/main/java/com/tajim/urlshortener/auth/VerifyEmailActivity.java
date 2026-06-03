@@ -50,6 +50,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
     private void initVariables(){
         authApi = new AuthApi(this);
         sessionManager = new SessionManager(this);
+        binding.tv2.setText("We’ve sent a verification email to\n"+sessionManager.getEmail()+". Please check your inbox, including the spam folder, to continue.");
     }
     private void setupClickListeners(){
 

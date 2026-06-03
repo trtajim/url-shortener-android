@@ -14,6 +14,8 @@ public class SessionManager {
 
     private static final String PREF_NAME = "auth_prefs";
     private static final String KEY_TOKEN = "token";
+    private static final String KEY_NAME = "name";
+    private static final String KEY_EMAIL = "email";
 
     private final SharedPreferences sharedPreferences;
     private final Context context;
@@ -27,9 +29,11 @@ public class SessionManager {
         this.context = context;
     }
 
-    public void saveToken(String token) {
+    public void saveUser(String name, String email, String token) {
 
         sharedPreferences.edit()
+                .putString(KEY_NAME, name)
+                .putString(KEY_EMAIL, email)
                 .putString(KEY_TOKEN, token)
                 .apply();
     }
@@ -49,6 +53,14 @@ public class SessionManager {
     public String getToken() {
 
         return sharedPreferences.getString(KEY_TOKEN, null);
+    }
+    public String getName() {
+
+        return sharedPreferences.getString(KEY_NAME, null);
+    }
+    public String getEmail() {
+
+        return sharedPreferences.getString(KEY_EMAIL, null);
     }
 
     public void routeUser(JSONObject user){

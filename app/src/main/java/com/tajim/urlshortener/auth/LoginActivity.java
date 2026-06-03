@@ -101,10 +101,14 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                sessionManager.saveToken(token);
+                JSONObject user = AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user");
+                String name = user.optString("name");
+                String email = user.optString("email");
+
+                sessionManager.saveUser(name,email,token);
 
                 Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
-                sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
+                sessionManager.routeUser(user);
 
             }
         });
