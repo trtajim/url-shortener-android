@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
         authApi.register(name, email, password, new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
-                AppUtils.endLoading();
+
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
                 String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);

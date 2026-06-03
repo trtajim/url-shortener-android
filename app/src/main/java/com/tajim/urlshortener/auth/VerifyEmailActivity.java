@@ -69,7 +69,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
                     authApi.logout(new SafeCallback(this) {
                         @Override
                         public void onSuccess(String bodyFromResponse) {
-                            AppUtils.endLoading();
+
                             sessionManager.clearTokenFromDevice();
                         }
                     });
@@ -87,7 +87,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         authApi.sendVerificationMail(new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
-                AppUtils.endLoading();
+
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
                 Toast.makeText(VerifyEmailActivity.this,AppUtils.getStringFromJsonObject(jsonObject, "message", "Verification Link was successfully sent") , Toast.LENGTH_SHORT).show();
@@ -102,7 +102,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
         authApi.getUser(new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
-                AppUtils.endLoading();
+
                 JSONObject user = AppUtils.getJsonObjFromString(bodyFromResponse);
                 String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
                 if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {

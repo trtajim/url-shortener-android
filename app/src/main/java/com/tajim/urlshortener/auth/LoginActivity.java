@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
         authApi.login(email, password, new SafeCallback(LoginActivity.this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
-                AppUtils.endLoading();
 
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
