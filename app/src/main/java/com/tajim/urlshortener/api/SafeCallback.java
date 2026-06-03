@@ -30,7 +30,6 @@ public abstract class SafeCallback implements Callback {
 
     @Override
     public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-        AppUtils.endLoading();
         String body = response.body().string();
 
         JSONObject jsonObject = AppUtils.getJsonObjFromString(body);

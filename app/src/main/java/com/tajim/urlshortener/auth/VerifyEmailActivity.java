@@ -53,16 +53,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
     }
     private void setupClickListeners(){
 
-        binding.btnLogout.setOnClickListener(v->{
-           logout();
-        });
-        binding.tvResendMail.setOnClickListener(v->{
-            sendVerificationMail();
-        });
-
-        binding.btnVerified.setOnClickListener(v->{
-            checkIfVerified();
-        });
+        binding.btnLogout.setOnClickListener(v -> logout());
+        binding.tvResendMail.setOnClickListener(v -> sendVerificationMail());
+        binding.btnVerified.setOnClickListener(v -> checkIfVerified());
     }
     private void logout(){
 
@@ -113,7 +106,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
                 JSONObject user = AppUtils.getJsonObjFromString(bodyFromResponse);
                 String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
                 if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {
-                    Toast.makeText(VerifyEmailActivity.this, " Email not verified. Please check your inbox.\"", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(VerifyEmailActivity.this, " Email not verified. Please check your inbox.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

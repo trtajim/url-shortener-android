@@ -1,11 +1,9 @@
 package com.tajim.urlshortener.utils;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.tajim.urlshortener.ui.activities.MainActivity;
 import com.tajim.urlshortener.auth.VerifyEmailActivity;
 import com.tajim.urlshortener.ui.activities.LandingActivity;

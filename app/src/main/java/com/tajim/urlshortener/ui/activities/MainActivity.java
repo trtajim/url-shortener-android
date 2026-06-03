@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         authApi.logout(new SafeCallback(this) {
                             @Override
                             public void onSuccess(String bodyFromResponse) {
+                                AppUtils.endLoading();
                                 sessionManager.clearTokenFromDevice();
                             }
                         });

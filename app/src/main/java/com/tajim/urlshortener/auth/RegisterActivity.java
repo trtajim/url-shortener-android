@@ -6,9 +6,7 @@ import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -20,10 +18,6 @@ import com.tajim.urlshortener.databinding.ActivityRegisterBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
 import org.json.JSONObject;
-import java.io.IOException;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     ActivityRegisterBinding binding;

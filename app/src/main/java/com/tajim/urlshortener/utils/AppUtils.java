@@ -1,7 +1,6 @@
 package com.tajim.urlshortener.utils;
 
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,7 +68,9 @@ public class AppUtils {
         InputMethodManager imm = (InputMethodManager)
                 view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
     public static void openLinksInCustomChromeTabOrBrowser(Context context, String url) {
 
