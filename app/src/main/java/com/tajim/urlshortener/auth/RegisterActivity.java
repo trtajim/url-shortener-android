@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -112,19 +114,20 @@ public class RegisterActivity extends AppCompatActivity {
         authApi.register(name, email, password, new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
+                AppUtils.endLoading();
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
                 String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
 
                 if (!jsonObject.has("token") || jsonObject.isNull("token")) {
-                    AppUtils.makeToast(RegisterActivity.this, "Token not found");
+                    Toast.makeText(RegisterActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 sessionManager.saveToken(token);
 
 
-                AppUtils.makeToast(RegisterActivity.this, "Account created Successfully");
+                Toast.makeText(RegisterActivity.this, "Account created Successfully", Toast.LENGTH_SHORT).show();
                 sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
             }
         });

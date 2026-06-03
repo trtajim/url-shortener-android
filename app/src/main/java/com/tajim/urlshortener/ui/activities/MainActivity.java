@@ -1,7 +1,5 @@
 package com.tajim.urlshortener.ui.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,11 +13,11 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.ApiConfig;
+import com.tajim.urlshortener.api.AuthApi;
+import com.tajim.urlshortener.api.SafeCallback;
 import com.tajim.urlshortener.databinding.ActivityMainBinding;
 import com.tajim.urlshortener.ui.fragments.DashboardFragment;
 import com.tajim.urlshortener.ui.fragments.ProfileFragment;
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ActionBarDrawerToggle toggle;
     private DashboardFragment dashboardFragment;
     private ProfileFragment profileFragment;
+    AuthApi authApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         profileFragment = new ProfileFragment();
         loadFragment(dashboardFragment);
         sessionManager = new SessionManager(this);
+        authApi = new AuthApi(this);
     }
     private void initNavigationDrawer(){
         setSupportActionBar(binding.toolbar);
@@ -121,7 +121,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if (id == R.id.about_developer) {
             AppUtils.openLinksInCustomChromeTabOrBrowser(this, "https://tajimz.xyz");
         }else if (id == R.id.logout) {
-            sessionManager.logout();
+
+            AppUtils.showMaterialDialog(
+
+                    this,
+                    "Sign Out",
+                    "Are you sure you want to sign out? You will need to sign in again to access your account.",
+                    "Log Out",
+                    (dialog, which) -> {
+                        AppUtils.startLoading(this, "Logging out...");
+
+                        authApi.logout(new SafeCallback(this) {
+                            @Override
+                            public void onSuccess(String bodyFromResponse) {
+                                sessionManager.clearTokenFromDevice();
+                            }
+                        });
+                    },
+                    "Stay Logged In",
+                    (dialog, which) -> dialog.dismiss()
+            );
         }
 
         binding.drawerLayout.closeDrawer(GravityCompat.START);

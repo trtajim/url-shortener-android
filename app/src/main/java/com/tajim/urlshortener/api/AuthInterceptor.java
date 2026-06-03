@@ -1,7 +1,6 @@
 package com.tajim.urlshortener.api;
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 import android.os.Handler;
 import android.os.Looper;
@@ -40,7 +39,7 @@ public class AuthInterceptor implements Interceptor {
             new Handler(Looper.getMainLooper()).post(() -> {
                 Toast.makeText(context, "Session expired", Toast.LENGTH_SHORT).show();
             });
-            sessionManager.logout();
+            sessionManager.clearTokenFromDevice();
 
 
         }else if (response.code() == 403){

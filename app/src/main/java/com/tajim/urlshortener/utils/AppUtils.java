@@ -4,9 +4,12 @@ package com.tajim.urlshortener.utils;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -24,9 +27,19 @@ import com.tajim.urlshortener.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class AppUtils {
+    private static final Handler MAIN_HANDLER =
+            new Handler(Looper.getMainLooper());
+
+    public static void postUI(Runnable runnable) {
+        MAIN_HANDLER.post(runnable);
+    }
+
+
     public static String getDeviceName(){
         return Build.MANUFACTURER + " " + Build.MODEL;
     }
@@ -51,11 +64,6 @@ public class AppUtils {
         }
     }
 
-    public static void makeToast(Activity activity, String message){
-        activity.runOnUiThread(()->{
-            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
-        });
-    }
 
     public static void turnOffKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager)
@@ -65,11 +73,9 @@ public class AppUtils {
     }
     public static void openLinksInCustomChromeTabOrBrowser(Context context, String url) {
 
-        int color = context.getResources().getColor(R.color.crimson_red);
-
         CustomTabsIntent customTabsIntent =
                 new CustomTabsIntent.Builder()
-                        .setToolbarColor(color)
+                        .setToolbarColor(ContextCompat.getColor(context, R.color.crimson_red))
                         .setShowTitle(true)
                         .build();
 
@@ -108,36 +114,38 @@ public class AppUtils {
 
     private static AlertDialog loadingDialog;
 
-    public static void startLoading(Activity activity, String message) {
+    public static void startLoading(Context context, String message) {
 
-        if (activity == null || activity.isFinishing()) return;
 
         if (loadingDialog != null && loadingDialog.isShowing()) {
             return;
         }
 
-        activity.runOnUiThread(() -> {
-
-            View dialogView = LayoutInflater.from(activity)
+        postUI(()->{
+            View dialogView = LayoutInflater.from(context)
                     .inflate(R.layout.custom_alert_for_loading, null);
 
             TextView loadingText = dialogView.findViewById(R.id.loadingText);
             loadingText.setText(message);
 
-            loadingDialog = new MaterialAlertDialogBuilder(activity)
+            loadingDialog = new MaterialAlertDialogBuilder(context)
                     .setView(dialogView)
                     .setCancelable(false)
                     .create();
 
             loadingDialog.show();
         });
+
     }
 
     public static void endLoading() {
-        if (loadingDialog != null && loadingDialog.isShowing()) {
-            loadingDialog.dismiss();
-            loadingDialog = null;
-        }
+        postUI(()->{
+            if (loadingDialog != null && loadingDialog.isShowing()) {
+                loadingDialog.dismiss();
+                loadingDialog = null;
+            }
+        });
+
     }
 
     public static JSONObject getJsonObjOrNullFromJsonObj(JSONObject jsonObject, String keyword) {
@@ -151,4 +159,31 @@ public class AppUtils {
             return null;
         }
     }
+
+    public static void showMaterialDialog(
+            Context context,
+            String title,
+            String message,
+            String positiveText,
+            DialogInterface.OnClickListener positiveListener,
+            String negativeText,
+            DialogInterface.OnClickListener negativeListener
+    ) {
+
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context)
+                .setTitle(title)
+                .setMessage(message);
+
+        if (positiveText != null) {
+            builder.setPositiveButton(positiveText, positiveListener);
+        }
+
+        if (negativeText != null) {
+            builder.setNegativeButton(negativeText, negativeListener);
+        }
+
+        builder.show();
+    }
+
+
 }

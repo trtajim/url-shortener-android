@@ -1,9 +1,9 @@
 package com.tajim.urlshortener.auth;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,12 +17,6 @@ import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
 
 import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class VerifyEmailActivity extends AppCompatActivity {
 
@@ -71,14 +65,26 @@ public class VerifyEmailActivity extends AppCompatActivity {
         });
     }
     private void logout(){
-        AppUtils.startLoading(this,"Signing out...");
 
-        authApi.logout(new SafeCallback(this) {
-            @Override
-            public void onSuccess(String bodyFromResponse) {
-                sessionManager.logout();
-            }
-        });
+        AppUtils.showMaterialDialog(
+                this,
+                "Sign Out",
+                "Are you sure you want to sign out? You will need to sign in again to access your account.",
+                "Log Out",
+                (dialog, which) -> {
+                    AppUtils.startLoading(this,"Signing out...");
+                    authApi.logout(new SafeCallback(this) {
+                        @Override
+                        public void onSuccess(String bodyFromResponse) {
+                            AppUtils.endLoading();
+                            sessionManager.clearTokenFromDevice();
+                        }
+                    });
+                },
+                "Stay Logged In",
+                (dialog, which) -> dialog.dismiss()
+        );
+
 
     }
 
@@ -88,9 +94,11 @@ public class VerifyEmailActivity extends AppCompatActivity {
         authApi.sendVerificationMail(new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
+                AppUtils.endLoading();
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
-                AppUtils.makeToast(VerifyEmailActivity.this, AppUtils.getStringFromJsonObject(jsonObject, "message", "Verification Link was successfully sent"));
+                Toast.makeText(VerifyEmailActivity.this,AppUtils.getStringFromJsonObject(jsonObject, "message", "Verification Link was successfully sent") , Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -101,10 +109,11 @@ public class VerifyEmailActivity extends AppCompatActivity {
         authApi.getUser(new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
+                AppUtils.endLoading();
                 JSONObject user = AppUtils.getJsonObjFromString(bodyFromResponse);
                 String emailVerifiedStatus = AppUtils.getStringFromJsonObject(user, "email_verified_at", null);
                 if (emailVerifiedStatus == null || emailVerifiedStatus.isEmpty() || emailVerifiedStatus.equals("null")) {
-                    AppUtils.makeToast(VerifyEmailActivity.this, "Email not verified. Please check your inbox.");
+                    Toast.makeText(VerifyEmailActivity.this, " Email not verified. Please check your inbox.\"", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

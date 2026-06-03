@@ -14,7 +14,7 @@ public class AuthApi {
     Context context;
     SessionManager sessionManager;
     public AuthApi(Context context){
-        this.context = context;
+        this.context = context.getApplicationContext();
         sessionManager = new SessionManager(context);
     }
     public void login (String email, String password, Callback callback){
@@ -66,6 +66,7 @@ public class AuthApi {
     }
 
     public void logout(Callback callback){
+
         String url = ApiConfig.API_BASE_URL+"/logout";
         RequestBody body = new FormBody.Builder().build();
 
@@ -73,7 +74,7 @@ public class AuthApi {
                 .url(url)
                 .post(body)
                 .build();
-        ApiClient.getClient(context)
+                ApiClient.getClient(context)
                 .newCall(request)
                 .enqueue(callback);
 

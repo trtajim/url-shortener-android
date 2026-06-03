@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,10 +20,6 @@ import com.tajim.urlshortener.databinding.ActivityLoginBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
 import org.json.JSONObject;
-import java.io.IOException;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -95,17 +92,19 @@ public class LoginActivity extends AppCompatActivity {
         authApi.login(email, password, new SafeCallback(LoginActivity.this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
+                AppUtils.endLoading();
+
                 JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
                 String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
                 if (!jsonObject.has("token") || jsonObject.isNull("token")) {
-                    AppUtils.makeToast(LoginActivity.this, "Token not found");
+                    Toast.makeText(LoginActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 sessionManager.saveToken(token);
 
-                AppUtils.makeToast(LoginActivity.this, "Logged in Successfully");
+                Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
                 sessionManager.routeUser(AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user"));
 
             }
