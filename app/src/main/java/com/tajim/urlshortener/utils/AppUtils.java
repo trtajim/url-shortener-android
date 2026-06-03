@@ -2,6 +2,8 @@ package com.tajim.urlshortener.utils;
 
 
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,6 +27,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.tajim.urlshortener.BuildConfig;
 import com.tajim.urlshortener.R;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import androidx.appcompat.app.AlertDialog;
@@ -65,6 +68,17 @@ public class AppUtils {
         }
     }
 
+    public static JSONArray getJsonArrayOrNullFromJsonObj(JSONObject jsonObject, String keyword) {
+        if (jsonObject == null) {
+            return null;
+        }
+
+        try {
+            return jsonObject.getJSONArray(keyword);
+        } catch (JSONException e) {
+            return null;
+        }
+    }
 
     public static void turnOffKeyboard(View view) {
         InputMethodManager imm = (InputMethodManager)
@@ -192,6 +206,15 @@ public class AppUtils {
         if (BuildConfig.DEBUG) {
             Log.d(keyword, message);
         }
+    }
+
+    public static void copyToClipBoard(Context context, String text) {
+        ClipboardManager clipboard =
+                (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        ClipData clip = ClipData.newPlainText("copied_text", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
     }
 
 

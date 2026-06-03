@@ -15,6 +15,9 @@
         android:theme="@style/Theme.UrlShortener"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.activities.ViewUrlActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.CreateUrlActivity"
             android:exported="false" />
         <activity
