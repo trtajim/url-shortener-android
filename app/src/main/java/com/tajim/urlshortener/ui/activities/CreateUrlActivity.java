@@ -1,6 +1,8 @@
 package com.tajim.urlshortener.ui.activities;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -12,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.tajim.urlshortener.api.SafeCallback;
 import com.tajim.urlshortener.api.UrlApi;
 import com.tajim.urlshortener.databinding.ActivityCreateUrlBinding;
+import com.tajim.urlshortener.utils.AppUtils;
 
 public class CreateUrlActivity extends AppCompatActivity {
 
@@ -60,5 +63,15 @@ public class CreateUrlActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null) {
+            view.clearFocus();
+            AppUtils.turnOffKeyboard(view);
+
+        }
+        return super.dispatchTouchEvent(ev);
     }
 }
