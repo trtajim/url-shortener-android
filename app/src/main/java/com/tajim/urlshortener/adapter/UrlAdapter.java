@@ -37,26 +37,24 @@ public class UrlAdapter extends RecyclerView.Adapter<UrlAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ShortUrl shortUrl =shortUrls.get(position);
         String shortLink = ApiConfig.SERVER_BASE_URL+"/"+shortUrl.shortCode;
-        holder.binding.tvShortUrlAlias.setText(shortLink);
+        holder.binding.tvShortUrl.setText(shortLink);
         holder.binding.tvLongUrl.setText(shortUrl.longUrl);
-        holder.binding.tvViews.setText("Clicks: "+shortUrl.clicks);
+        holder.binding.tvView.setText(""+shortUrl.clicks);
         if(shortUrl.hasPassword) {
             AppUtils.logD("UrlAdapter", "onBindViewHolder: "+shortUrl.hasPassword);
-            holder.binding.imgLock.setVisibility(VISIBLE);
+            holder.binding.tvLocked.setVisibility(VISIBLE);
         }
-        else holder.binding.imgLock.setVisibility(GONE);
+        else holder.binding.tvLocked.setVisibility(GONE);
 
-        holder.binding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                AppUtils.copyToClipBoard(holder.binding.getRoot().getContext(), shortLink);
-
-                return true;
-            }
+        holder.binding.btnCopy.setOnClickListener(v->{
+            AppUtils.copyToClipBoard(holder.binding.getRoot().getContext(), shortLink);
         });
 
+
         holder.binding.getRoot().setOnClickListener(v->{
-            holder.binding.getRoot().getContext().startActivity(new Intent(holder.binding.getRoot().getContext(), ViewUrlActivity.class));
+            AppUtils.copyToClipBoard(holder.binding.getRoot().getContext(), shortLink);
+
+//            holder.binding.getRoot().getContext().startActivity(new Intent(holder.binding.getRoot().getContext(), ViewUrlActivity.class));
         });
 
 

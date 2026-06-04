@@ -28,7 +28,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="Full Name">
+            android:hint="Full Name"
+            app:startIconDrawable="@drawable/icon_person"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tieName"
@@ -44,7 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:enabled="false"
-            android:hint="Email Address">
+            android:hint="Email Address"
+            app:startIconDrawable="@drawable/icon_mail"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tieEmail"
@@ -52,63 +56,88 @@
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress" />
         </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="Current Password"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tiePassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilNewPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="New Password"
-            app:passwordToggleEnabled="true"
-            android:layout_marginBottom="16dp"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieNewPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilConfirmPassword"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Confirm Password"
-            app:passwordToggleEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieConfirmPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/tvForgotPassword"
+            android:id="@+id/btnChangePassword"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Change Password"
             android:layout_gravity="end"
-            android:text="Forgot Password?"
-            android:textColor="?attr/colorPrimary" />
+            android:drawableEnd="@drawable/icon_expand"
+            android:drawableTint="?attr/colorOnSurface"/>
+        <LinearLayout
+            android:id="@+id/passwordContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+
+            >
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:hint="Current Password"
+                app:passwordToggleEnabled="true"
+                app:startIconDrawable="@drawable/icon_lock"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tiePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNewPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="New Password"
+                app:passwordToggleEnabled="true"
+                android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/icon_lock"
+
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tieNewPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilConfirmPassword"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm New Password"
+                app:passwordToggleEnabled="true"
+                app:startIconDrawable="@drawable/icon_lock"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tieConfirmPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/tvForgotPassword"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Forgot Password?"
+                android:textColor="?attr/colorPrimary" />
+
+        </LinearLayout>
+
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnUpdate"

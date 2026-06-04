@@ -1,18 +1,22 @@
 package com.tajim.urlshortener.ui.fragments;
 
+import static android.view.View.GONE;
+
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.transition.AutoTransition;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.tajim.urlshortener.R;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
 import com.tajim.urlshortener.api.SafeCallback;
-import com.tajim.urlshortener.auth.VerifyEmailActivity;
 import com.tajim.urlshortener.databinding.FragmentProfileBinding;
 import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
@@ -32,6 +36,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
         initVariables();
+        initClickListeners();
         updateViews();
         updateProfile();
 
@@ -42,6 +47,12 @@ public class ProfileFragment extends Fragment {
         sessionManager = new SessionManager(requireContext().getApplicationContext());
         authApi = new AuthApi(requireContext());
 
+        binding.passwordContainer.setVisibility(GONE);
+
+
+    }
+
+    private void initClickListeners(){
         binding.tilEmail.setOnClickListener(v->{
             Toast.makeText(requireContext(), "Email address can't be changed.", Toast.LENGTH_SHORT).show();
         });
@@ -49,6 +60,7 @@ public class ProfileFragment extends Fragment {
             AppUtils.openLinksInCustomChromeTabOrBrowser(requireActivity(), ApiConfig.SERVER_BASE_URL+"/forgot-password");
         });
         binding.btnDelete.setOnClickListener(v->{
+            hideKeyboardAndClearFocus();
             AppUtils.showMaterialDialog(requireContext(), "Delete Your Account","To ensure your data is handled securely, account deletion must be completed through your profile settings on our web app.", "Go to Web App", (dialog, which) -> {
                 AppUtils.openLinksInCustomChromeTabOrBrowser(requireActivity(), ApiConfig.SERVER_BASE_URL+"/settings/profile");
             }, "Cancel", (dialog, which) -> {});
@@ -62,6 +74,7 @@ public class ProfileFragment extends Fragment {
         });
 
         binding.btnUpdate.setOnClickListener(v -> {
+            hideKeyboardAndClearFocus();
 
             String newNme = binding.tieName.getText().toString().trim();
             String oldPassword = binding.tiePassword.getText().toString().trim();
@@ -107,6 +120,41 @@ public class ProfileFragment extends Fragment {
                 }
             });
         });
+
+        binding.btnChangePassword.setOnClickListener(v -> {
+            hideKeyboardAndClearFocus();
+
+            ViewGroup parent = (ViewGroup) binding.passwordContainer.getParent();
+
+            AutoTransition transition = new AutoTransition();
+            transition.setDuration(300);
+
+            TransitionManager.beginDelayedTransition(parent, transition);
+
+
+            if (binding.passwordContainer.getVisibility() == View.VISIBLE) {
+
+                binding.passwordContainer.setVisibility(View.GONE);
+
+                binding.btnChangePassword.setCompoundDrawablesWithIntrinsicBounds(
+                        0, 0, R.drawable.icon_expand, 0
+                );
+
+            } else {
+
+                binding.passwordContainer.setVisibility(View.VISIBLE);
+
+                binding.btnChangePassword.setCompoundDrawablesWithIntrinsicBounds(
+                        0, 0, R.drawable.icon_collapse, 0
+                );
+            }
+        });
+
+
+        binding.getRoot().setOnTouchListener((v, event) -> {
+            hideKeyboardAndClearFocus();
+            return false;
+        });
     }
 
     private void updateViews(){
@@ -139,6 +187,13 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+    }
+    private void hideKeyboardAndClearFocus() {
+        View current = requireActivity().getCurrentFocus();
+        if (current != null) {
+            current.clearFocus();
+            AppUtils.turnOffKeyboard(current);
+        }
     }
 
 

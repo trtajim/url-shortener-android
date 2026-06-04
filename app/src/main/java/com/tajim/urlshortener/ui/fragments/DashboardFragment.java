@@ -40,8 +40,8 @@ public class DashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         initVariables();
-        fetchUrls();
         initListeners();
+        fetchUrls();
 
         return binding.getRoot();
 
@@ -52,8 +52,6 @@ public class DashboardFragment extends Fragment {
         adapter = new UrlAdapter(shortUrls);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-
-
 
     }
     private void fetchUrls(){
@@ -127,5 +125,6 @@ public class DashboardFragment extends Fragment {
     public void onResume() {
         super.onResume();
         fetchUrls();
+        binding.swipeRefreshLayout.setRefreshing(true);
     }
 }
