@@ -107,4 +107,28 @@ public class AuthApi {
                 .newCall(request)
                 .enqueue(callback);
     }
+
+    public void updateUser(String name, String oldPassword, String newPassword, Callback callback) {
+
+        String url = ApiConfig.API_BASE_URL + "/me";
+
+        FormBody.Builder bodyBuilder = new FormBody.Builder()
+                .add("name", name);
+
+        if (newPassword != null && !newPassword.isEmpty()) {
+            bodyBuilder.add("old_password", oldPassword);
+            bodyBuilder.add("new_password", newPassword);
+        }
+
+        RequestBody body = bodyBuilder.build();
+
+        Request request = ApiRequest.authorized(sessionManager.getToken())
+                .url(url)
+                .patch(body)
+                .build();
+
+        ApiClient.getClient(context)
+                .newCall(request)
+                .enqueue(callback);
+    }
 }

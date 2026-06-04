@@ -37,6 +37,11 @@ public class SessionManager {
                 .putString(KEY_TOKEN, token)
                 .apply();
     }
+    public void updateName(String name){
+        sharedPreferences.edit()
+                .putString(KEY_NAME, name)
+                .apply();
+    }
 
     public boolean isLoggedIn() {
 
