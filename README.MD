@@ -142,7 +142,7 @@ buildTypes {
         buildConfigField "String", "SERVER_BASE_URL", "\"http://192.168.1.6:8000\""
     }
     release {
-        buildConfigField "String", "SERVER_BASE_URL", "\"https://go.tajimz.xyz\""
+        buildConfigField "String", "SERVER_BASE_URL", "\"https://your-server.xyz\""
     }
 }
 ```
