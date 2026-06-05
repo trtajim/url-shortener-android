@@ -31,7 +31,7 @@ https://apkpure.com/com.tajim.urlshortener
 ---
 
 | Landing | Login | Dashboard | Create URL | Modern Menu |
-| ------- | ----- | --------- | ----------- | ----------- |
+| ------- | ----- | --------- | ---------- | ----------- |
 | ![](screenshots/0.png) | ![](screenshots/1.png) | ![](screenshots/2.png) | ![](screenshots/3.png) | ![](screenshots/4.png) |
 ---
 
