@@ -210,7 +210,7 @@ All rights reserved unless stated otherwise in a LICENSE file.
 ## 👨‍💻 Developer
 
 Built by **Tajim**
-🌐 [https://trtajim.xyz](https://trtajim.xyz)
+🌐 [https://tajimz.xyz](https://tajimz.xyz)
 
 ---
 
