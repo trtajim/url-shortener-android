@@ -131,4 +131,24 @@ public class AuthApi {
                 .newCall(request)
                 .enqueue(callback);
     }
+
+    public void socialLogin(String provider, String id_token, Callback callback){
+        String url = ApiConfig.API_BASE_URL+"/social-login";
+
+        RequestBody body = new FormBody.Builder()
+                .add("provider", provider)
+                .add("id_token", id_token)
+                .add("device_name", AppUtils.getDeviceName())
+                .build();
+
+        Request request = ApiRequest.guest()
+                .url(url)
+                .post(body)
+                .build();
+
+        ApiClient.getClient(context)
+                .newCall(request)
+                .enqueue(callback);
+    }
+
 }

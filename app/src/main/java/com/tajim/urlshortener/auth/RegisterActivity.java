@@ -7,10 +7,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialException;
+
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
 import com.tajim.urlshortener.api.SafeCallback;
@@ -23,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     ActivityRegisterBinding binding;
     SessionManager sessionManager;
     AuthApi authApi;
+    CredentialManager credentialManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +54,11 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     private void initVariables(){
+        credentialManager = CredentialManager.create(this);
         authApi = new AuthApi(this);
         sessionManager = new SessionManager(this);
         binding.registerProgressBar.setVisibility(GONE);
+
 
         AppUtils.clearErrorOnTextChange(binding.tieEmail, binding.tilEmail);
         AppUtils.clearErrorOnTextChange(binding.tiePassword, binding.tilPassword);
@@ -101,6 +113,10 @@ public class RegisterActivity extends AppCompatActivity {
 
 
         });
+
+        binding.btnGoogleRegister.setOnClickListener(v->{
+            requestGoogleLogin();
+        });
     }
     private void register(String name, String email, String password){
         AppUtils.startLoading(this, "Creating Account...");
@@ -108,29 +124,72 @@ public class RegisterActivity extends AppCompatActivity {
         authApi.register(name, email, password, new SafeCallback(this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
-
-                JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
-
-                String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
-
-                if (!jsonObject.has("token") || jsonObject.isNull("token")) {
-                    Toast.makeText(RegisterActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                JSONObject user = AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user");
-                String name = user.optString("name");
-                String email = user.optString("email");
-
-                sessionManager.saveUser(name,email,token);
-
-                Toast.makeText(RegisterActivity.this, "Account created Successfully", Toast.LENGTH_SHORT).show();
-                sessionManager.routeUser(user);
+                handleSuccessRegister(bodyFromResponse);
             }
         });
 
 
 
+    }
+    private void handleSuccessRegister(String bodyFromResponse){
+
+        JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
+
+        String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
+
+        if (!jsonObject.has("token") || jsonObject.isNull("token")) {
+            Toast.makeText(RegisterActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        JSONObject user = AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user");
+        String name = user.optString("name");
+        String email = user.optString("email");
+
+        sessionManager.saveUser(name,email,token);
+
+        Toast.makeText(RegisterActivity.this, "Welcome!", Toast.LENGTH_SHORT).show();
+        sessionManager.routeUser(user);
+    }
+
+    private void requestGoogleLogin(){
+        GetGoogleIdOption getGoogleIdOption  = new GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(ApiConfig.GOOGLE_CLIENT_ID)
+                .setAutoSelectEnabled(true)
+                .build();
+
+        GetCredentialRequest request = new GetCredentialRequest.Builder()
+                .addCredentialOption(getGoogleIdOption)
+                .build();
+
+        credentialManager.getCredentialAsync(this,
+                request,
+                new android.os.CancellationSignal(),
+                getMainExecutor(),
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                    @Override
+                    public void onResult(GetCredentialResponse getCredentialResponse) {
+                        GoogleIdTokenCredential credential = GoogleIdTokenCredential.createFrom(getCredentialResponse.getCredential().getData());
+
+                        String idToken = credential.getIdToken();
+                        callSocialLogin("google",idToken);
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull GetCredentialException e) {
+                        Toast.makeText(RegisterActivity.this, "Sign-Up failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();                    }
+                });
+
+    }
+    private void callSocialLogin(String provider, String id_token){
+        authApi.socialLogin(provider, id_token, new SafeCallback(this) {
+            @Override
+            public void onSuccess(String bodyFromResponse) {
+                handleSuccessRegister(bodyFromResponse);
+            }
+        });
     }
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

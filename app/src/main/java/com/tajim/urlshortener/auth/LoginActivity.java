@@ -2,7 +2,11 @@ package com.tajim.urlshortener.auth;
 
 import static android.view.View.GONE;
 import android.content.Intent;
+
+import androidx.annotation.NonNull;
+import androidx.credentials.CredentialManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,6 +17,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.credentials.CredentialManagerCallback;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.exceptions.GetCredentialException;
+
 import com.tajim.urlshortener.api.ApiConfig;
 import com.tajim.urlshortener.api.AuthApi;
 import com.tajim.urlshortener.api.SafeCallback;
@@ -21,11 +30,15 @@ import com.tajim.urlshortener.utils.AppUtils;
 import com.tajim.urlshortener.utils.SessionManager;
 import org.json.JSONObject;
 
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
+
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
     SessionManager sessionManager;
     AuthApi authApi;
+    CredentialManager credentialManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         setupLayout();
         initVariables();
         initClickListeners();
+
     }
     private void enableEdgeToEdge(){
         EdgeToEdge.enable(this);
@@ -52,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginProgressBar.setVisibility(GONE);
         AppUtils.clearErrorOnTextChange(binding.tieEmail, binding.tilEmail);
         AppUtils.clearErrorOnTextChange(binding.tiePassword, binding.tilPassword);
+        credentialManager = CredentialManager.create(this);
     }
     private void initClickListeners(){
         binding.btnLogin.setOnClickListener(v->{
@@ -81,6 +96,9 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvRegister.setOnClickListener(v->{
             startActivity(new Intent(this, RegisterActivity.class));
         });
+        binding.btnGoogleLogin.setOnClickListener(v->{
+            requestGoogleLogin();
+        });
     }
 
 
@@ -92,24 +110,70 @@ public class LoginActivity extends AppCompatActivity {
         authApi.login(email, password, new SafeCallback(LoginActivity.this) {
             @Override
             public void onSuccess(String bodyFromResponse) {
+                handleLoginSuccess(bodyFromResponse);
 
-                JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
+            }
+        });
+    }
 
-                String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
-                if (!jsonObject.has("token") || jsonObject.isNull("token")) {
-                    Toast.makeText(LoginActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+    private void handleLoginSuccess(String bodyFromResponse){
 
-                JSONObject user = AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user");
-                String name = user.optString("name");
-                String email = user.optString("email");
+        JSONObject jsonObject = AppUtils.getJsonObjFromString(bodyFromResponse);
 
-                sessionManager.saveUser(name,email,token);
+        String token = AppUtils.getStringFromJsonObject(jsonObject, "token", null);
+        if (!jsonObject.has("token") || jsonObject.isNull("token")) {
+            Toast.makeText(LoginActivity.this, "Token not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
-                sessionManager.routeUser(user);
+        JSONObject user = AppUtils.getJsonObjOrNullFromJsonObj(jsonObject, "user");
+        String name = user.optString("name");
+        String email = user.optString("email");
 
+        sessionManager.saveUser(name,email,token);
+
+        Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
+        sessionManager.routeUser(user);
+
+    }
+
+    private void requestGoogleLogin(){
+        GetGoogleIdOption getGoogleIdOption  = new GetGoogleIdOption.Builder()
+                .setFilterByAuthorizedAccounts(false)
+                .setServerClientId(ApiConfig.GOOGLE_CLIENT_ID)
+                .setAutoSelectEnabled(true)
+                .build();
+
+        GetCredentialRequest request = new GetCredentialRequest.Builder()
+                .addCredentialOption(getGoogleIdOption)
+                .build();
+
+        credentialManager.getCredentialAsync(this,
+                request,
+                new android.os.CancellationSignal(),
+                getMainExecutor(),
+                new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                    @Override
+                    public void onResult(GetCredentialResponse getCredentialResponse) {
+                        GoogleIdTokenCredential credential = GoogleIdTokenCredential.createFrom(getCredentialResponse.getCredential().getData());
+
+                        String idToken = credential.getIdToken();
+                        callSocialLogin("google",idToken);
+
+                    }
+
+                    @Override
+                    public void onError(@NonNull GetCredentialException e) {
+                        Toast.makeText(LoginActivity.this, "Sign-in failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();                    }
+                });
+
+    }
+
+    private void callSocialLogin(String provider, String id_token){
+        authApi.socialLogin(provider, id_token, new SafeCallback(this) {
+            @Override
+            public void onSuccess(String bodyFromResponse) {
+                handleLoginSuccess(bodyFromResponse);
             }
         });
     }
