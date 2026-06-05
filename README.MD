@@ -28,7 +28,6 @@ The backend API is shared with the web application:
 https://apkpure.com/com.tajim.urlshortener
 
 ## 📸 Screenshots
-https://apkpure.com/trimurl-url-shortener/com.tajim.urlshortener
 ---
 
 | Login                      | Dashboard                      | Create URL                      | Modern Menu                  |
